@@ -1,21 +1,18 @@
 from flask import Flask, render_template, request
-import sys, os
+import sys, os, threading
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from pinger import ping_websites
+from pinger import ping_websites, add_website
+from db_tools import initialize_db
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        add_website(request.form['url'], request.form['frequency'])
     return render_template('home.html')
 
-#Currently printing the responses from a single website
-@app.route('/status', methods=['POST'])
-def status():
-    temp_website_dict = dict()
-    temp_website_dict["url"] = request.form.get('url')
-    temp_website_dict["freq"] = int(request.form.get('frequency'))
-    ping_websites([temp_website_dict])
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    initialize_db()
+    threading.Thread(target=ping_websites, daemon=True).start()
+    app.run(debug=True, use_reloader=False)
