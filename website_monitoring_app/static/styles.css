@@ -1,0 +1,24 @@
+.status-active {
+    border: 2px solid green;
+    background-color: #d4f4d4;
+    color: green;
+    border-radius: 15px;
+    display: inline-block;
+    padding: 4px 10px;
+}
+
+.status-warning {
+    border: 2px solid red;
+    background-color: #f4d4d4;
+    color: red;
+    border-radius: 15px;
+    display: inline-block;
+    padding: 4px 10px;
+}
+
+.badge-bg-light-success {
+  background-color: #90ee90 !important; 
+  color: #155724 !important; 
+}
+
+
