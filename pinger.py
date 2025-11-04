@@ -8,29 +8,28 @@ def ping(url):
         response_time = response.elapsed.total_seconds()
         log_availability(url, response.status_code, response_time)
         t = time.localtime()
-        current_time = time.strftime("%H:%M:%S", t)
-        print(url, current_time)
     except Exception as e:
+        pass
         print(f"Error {url}: {e}")
 
 #Repeated pinging for given websites with specific frequency
 def ping_websites():
-    websites = get_all_websites_from_db()
-    next_pings = {w["url"]: time.time() for w in websites}
+    websites = get_user_entered_data()
+    next_pings = {website["url"]: time.time() for website in websites}
 
     while True:
         now = time.time()
 
         # Refresh list every 10 seconds
         if int(now) % 10 == 0:
-            websites = get_all_websites_from_db()
-            for w in websites:
-                if w["url"] not in next_pings:
-                    next_pings[w["url"]] = now
+            websites = get_user_entered_data()
+            for website in websites:
+                if website["url"] not in next_pings:
+                    next_pings[website["url"]] = now
 
-        for w in websites:
-            if now >= next_pings[w["url"]]:
-                ping(w["url"])
-                next_pings[w["url"]] = now + w["frequency"]
+        for website in websites:
+            if now >= next_pings[website["url"]]:
+                ping(website["url"])
+                next_pings[website["url"]] = now + website["frequency"]
 
         time.sleep(0.5)
