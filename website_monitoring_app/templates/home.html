@@ -1,18 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Website Monitor</title>
+  <meta charset="UTF-8" />
+  <title>Website Monitor</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+
 </head>
 <body>
-    <form action="/" method="post">
-    <label for="url">Website URL:</label>
-    <input type="url" id="url" name="url" required />
-    <br>
-    <label for="frequency">Ping Frequency (seconds):</label>
-    <input type="number" id="frequency" name="frequency" min="1" required />
-    <br>
-    <button type="submit">Submit</button>
-  </form>
+  <br>
+  <h2 style="text-align: center;">Website Monitoring Tool</h2>
+  <div class="container vh-100 d-flex flex-column justify-content-start align-items-start py-4" style="max-width: 600px;">
+    
+    <!-- Add Website Button -->
+    <button class="btn btn-success d-block mb-4" id="toggleFormBtn">+ Add Website</button>
+
+    <!-- Add URL Form initially hidden -->
+    <div class="card p-4 shadow mb-4 w-100" id="addWebsiteForm" style="display: none;">
+      <form action="/" method="post">
+         <div class="form-group">
+          <label for="urlInput">Website Name</label>
+          <input type="text" class="form-control" id="website_name" name="website_name" placeholder="Example" required />
+        </div>
+        <div class="form-group">
+          <label for="urlInput">Website URL</label>
+          <input type="url" class="form-control" id="url" name="url" placeholder="https://www.example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="frequency">Ping Frequency (seconds)</label>
+          <input type="number" class="form-control" id="frequency" name="frequency" placeholder="30" min="1" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block mt-3">Add URL</button>
+      </form>
+    </div>
+    
+    <!-- Websites being monitored -->
+    <div class="row">
+    {% for website in urls %}
+    <div class="col-12 col-sm-6 col-md-4 col-lg-0.5 mb-3" style="min-width: 300px; max-width: 350px;">
+      <div class="card h-100 p-3">
+        <h5 class="card-title mb-2 d-flex align-items-center justify-content-between" style="gap:8px;">
+          <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%;">
+            {{ website.name }}
+          </span>
+          <div class="d-inline-flex align-items-center gap-2 ms-2">
+            <form action="/delete" method="POST" style="display:inline;">
+              <input type="hidden" name="website_url" value="{{ website.url }}">
+              <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete" style="padding:0.1rem 0.3rem;">
+                <i class="bi bi-x-circle"></i>
+              </button>
+            </form>
+            <form action="/status" method="GET" style="display:inline;">
+              <input type="hidden" name="website_url" value="{{ website.url }}">
+              <button type="submit" class="btn btn-outline-primary btn-sm" title="Status" style="padding:0.1rem 0.3rem;">
+                <i class="bi bi-arrow-right-circle"></i>
+              </button>
+            </form>
+          </div>
+        </h5>
+        <h5 class="card-title mb-2">
+          <span class="badge {% if website.current_status == 'online' %}bg-success{% else %}bg-danger{% endif %}">
+            {{ website.current_status }}
+          </span>
+        </h5>
+        <h5 class="card-title mb-2 text-muted small" style="word-break: break-all;">{{ website.url }}</h5>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+
+
+  </div>
+
+  <script>
+    document.getElementById('toggleFormBtn').addEventListener('click', function() {
+      const formDiv = document.getElementById('addWebsiteForm');
+      if (formDiv.style.display === 'none') {
+        formDiv.style.display = 'block';
+      } else {
+        formDiv.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
