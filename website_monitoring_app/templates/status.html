@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Filter by time (minutes)
       if (minutesValue && !isNaN(minutesValue)) {
         const diffMs = now - requestedAt;
-        const diffMinutes = diffMs / (6 * 10000); 
+        const diffMinutes = diffMs / (60 * 1000); 
         if (diffMinutes > minutesValue) {
             show = false;
         }
