@@ -28,16 +28,24 @@ def initialize_db():
     conn.commit()
     conn.close()
 
-#TODO Check later what happends if same url is entered again (prob. error)
+#Add Website if URL not already in database
 def add_website(name, url, frequency):
     conn = sqlite3.connect('website_monitor.db', timeout=5)
     cursor = conn.cursor()
+
+    # Check if URL already exists
+    cursor.execute("SELECT 1 FROM websites WHERE url = ?", (url,))
+    if cursor.fetchone() is not None:
+        conn.close()
+        return
+
     cursor.execute(
-        f"INSERT INTO websites (name, url, frequency) VALUES (?, ?, ?)", 
+        "INSERT INTO websites (name, url, frequency) VALUES (?, ?, ?)", 
         (name, url, frequency)
     )
     conn.commit()
     conn.close()
+
 
 #Log the ping with website_id, response status, time and timestamp
 def log_availability(url, status, response_time):
