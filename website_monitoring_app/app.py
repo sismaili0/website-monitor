@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sys, os, threading
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from pinger import ping_websites, add_website
 from db_tools import *
 
