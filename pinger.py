@@ -7,10 +7,9 @@ def ping(url):
         response = requests.get(url)
         response_time = response.elapsed.total_seconds()
         log_availability(url, response.status_code, response_time)
-        t = time.localtime()
     except Exception as e:
-        pass
         print(f"Error {url}: {e}")
+        log_availability(url, 0, 0.0)
 
 #Repeated pinging for given websites with specific frequency
 def ping_websites():

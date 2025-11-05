@@ -25,17 +25,16 @@ def status_of_website():
     else:
         selected_url = request.args.get('website_url')
     log_of_website = get_log_of_website(selected_url)
-    website_availability, website_name, average_response_time, current_status = get_website_availability_stats(selected_url)
+    website_availability, website_name, average_response_time, current_status, total_count = get_website_availability_stats(selected_url)
     return render_template('status.html', url = selected_url, log_of_website = log_of_website, 
                            website_availability = website_availability, website_name=website_name,
-                             average_response_time = average_response_time, current_status = current_status )
+                             average_response_time = average_response_time, current_status = current_status, total_count = total_count )
 
 @app.route('/delete', methods=['POST'])
 def delete_monitored_website():
     url = request.form.get('website_url')
     delete_website(url)
     return redirect(url_for('home')) 
-
 
 if __name__ == '__main__':
     initialize_db()

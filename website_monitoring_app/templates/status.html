@@ -10,15 +10,19 @@
 <h4 class="mb-3">
   <span class="me-3">
     <strong>Availability:</strong>
-    <span class="text-danger">{{ website_availability }}</span>
+    <span class="text-muted">{{ website_availability }}</span>
   </span>
   <span class="me-3">
     <strong>Average Response (seconds):</strong>
-    <span class="text-danger">{{ average_response_time }}</span>
+    <span class="text-muted">{{ average_response_time }}</span>
+  </span>
+  <span class="me-3">
+    <strong>Current Status:</strong>
+    <span class="text-muted">{{ current_status }}</span>
   </span>
   <span>
-    <strong>Current Status:</strong>
-    <span class="text-danger">{{ current_status }}</span>
+    <strong>Total Checks:</strong>
+    <span class="text-muted">{{ total_count }}</span>
   </span>
 </h4>
 
@@ -28,8 +32,8 @@
       <label for="statusFilter" class="form-label">Filter Status</label>
       <select id="statusFilter" class="form-select">
         <option value="">All</option>
-        <option value="200">Online (2xx)</option>
-        <option value="Other">Warning (non-2xx)</option>
+        <option value="online">Online (available)</option>
+        <option value="warning">Warning (not available)</option>
       </select>
     </div>
     <div class="col-md-3">
@@ -106,10 +110,16 @@ document.addEventListener('DOMContentLoaded', function () {
       let show = true;
 
       // Filter by status
-      if (statusValue) {
-        if (statusValue === '200' && status !== '200') show = false;
-        else if (statusValue === 'Other' && status === '200') show = false;
-      }
+     const statusCode = Number(row.cells[0].textContent.trim());
+
+     if (statusValue === 'online') {
+        if (!(statusCode >= 100 && statusCode < 400)) show = false;
+     } else if (statusValue === 'warning') {
+        if (statusCode >= 100 && statusCode < 400) show = false;
+     } else {
+        show = true;
+     }
+
 
       // Filter by date range
       if (daysValue) {
