@@ -2,7 +2,9 @@
 
 ## Description
 
-This project is a website monitoring tool that periodically pings (sends HTTP GET requests) to specified URLs and prints their HTTP status codes.
+This project is a website monitoring tool that periodically sends HTTP GET requests (pings) to user-specified URLs at defined intervals. Each check is stored in a database, enabling users to view detailed insights including availability percentage, average response time, current status, total checks performed, and a complete log history.
+
+The logs are displayed in a filterable table, allowing users to easily analyze performance and uptime data for any monitored website.
 
 ## Usage
 1. Install dependencies:
